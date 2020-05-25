@@ -1,7 +1,5 @@
 package com.me4502.CreditCheque;
 
-import java.io.BufferedReader;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -11,11 +9,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.me4502.CreditCheque.gameplay.Game;
 import com.me4502.CreditCheque.ui.MainMenuScreen;
 import com.me4502.CreditCheque.ui.Screen;
+
+import java.io.BufferedReader;
 
 public class CreditCheque extends ApplicationAdapter {
 
@@ -52,6 +54,7 @@ public class CreditCheque extends ApplicationAdapter {
 
 	Camera camera;
 
+	public GlyphLayout glyphLayout;
 	public BitmapFont mainFont;
 	public BitmapFont smallFont;
 
@@ -101,6 +104,8 @@ public class CreditCheque extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 
+		glyphLayout = new GlyphLayout();
+
 		mainFont = new BitmapFont(Gdx.files.internal("font/main.fnt"), Gdx.files.internal("font/main.png"), false);
 		smallFont = new BitmapFont(Gdx.files.internal("font/small.fnt"), Gdx.files.internal("font/small.png"), false);
 
@@ -127,39 +132,34 @@ public class CreditCheque extends ApplicationAdapter {
 
 	public void drawCentredText(BitmapFont font, SpriteBatch batch, String text, int x, int y) {
 
-		x -= font.getBounds(text).width/2;
+		glyphLayout.setText(font, text);
+		x -= glyphLayout.width/2;
 
 		font.draw(batch, text, x, y);
 	}
 
 	public void load() {
 
-		try {
-			BufferedReader reader = Gdx.files.local("save-data.dat").reader(1024);
-
-			String line = "";
-			while((line = reader.readLine()) != null) {
-				if(line.startsWith("highscore:"))
+		try(BufferedReader reader = Gdx.files.local("save-data.dat").reader(1024)) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.startsWith("highscore:"))
 					highScore = Integer.parseInt(line.replace("highscore:", ""));
 			}
-
-			reader.close();
-		} catch(Exception e){
+		} catch (GdxRuntimeException e) {
+			// ignore
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void save() {
 
-		try {
-			//PrintWriter writer = new PrintWriter(Gdx.files.local("save-data.dat").writer(false));
-
-			//writer.println("highscore:" + highScore);
-
-			//writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try(PrintWriter writer = new PrintWriter(Gdx.files.local("save-data.dat").writer(false))) {
+//			writer.println("highscore:" + highScore);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public class InputListener implements InputProcessor {

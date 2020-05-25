@@ -16,7 +16,7 @@ public class MainMenuScreen extends Screen {
 	@Override
 	public void init() {
 
-		buttons = new ArrayList<Button>();
+		buttons = new ArrayList<>();
 
 		buttons.add(new CaptionButton(new Vector2(getCentreX() - 64, getCentreY() + 86), 128, 32, "1 Player") {
 
@@ -34,20 +34,13 @@ public class MainMenuScreen extends Screen {
 				CreditCheque.instance.screen = new PlayScreen();
 			}
 		});
-		buttons.add(new CaptionButton(new Vector2(getCentreX() - 64, getCentreY() - 38), 128, 32, "Exit") {
-
-			@Override
-			public void performAction() {
-				System.exit(0);
-			}
-		});
-		/*buttons.add((MAPLButton) new MAPLButton(CreditCheque.instance.getWindowWidth()-32, 0, 32, 32, "Settings", null) {
-
-			@Override
-			public void clickAction(int button) {
-				CreditCheque.instance.setCurrentScreen(ScreenType.getInstanceOfScreen("Settings"));
-			}
-		}.setIdentifier("button:Settings"));*/
+//		buttons.add(new CaptionButton(new Vector2(getCentreX() - 64, getCentreY() - 38), 128, 32, "Exit") {
+//
+//			@Override
+//			public void performAction() {
+//				System.exit(0);
+//			}
+//		});
 	}
 
 	@Override
@@ -55,7 +48,7 @@ public class MainMenuScreen extends Screen {
 		for(Button button : buttons)
 			button.render(batch);
 
-		CreditCheque.instance.smallFont.draw(batch, "2.0" + "         Copyright© 2013-2015 Me4502", 5, 15);
+		CreditCheque.instance.smallFont.draw(batch, "2.0" + "         Copyright\u00A9 2013-2015 Me4502", 5, 15);
 	}
 
 	@Override
